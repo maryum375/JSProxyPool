@@ -1,0 +1,23 @@
+{
+  "name": "JSProxyPool",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Start.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maryum375/JSProxyPool.git"
+  },
+  "author": "maryum375",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/maryum375/JSProxyPool/issues"
+  },
+  "homepage": "https://github.com/maryum375/JSProxyPool",
+  "dependencies": {
+    "mongodb": "^2.0.42",
+    "monk": "^1.0.1"
+  }
+}
