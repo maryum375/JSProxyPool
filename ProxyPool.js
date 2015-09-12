@@ -8,18 +8,17 @@ ProxyPool.prototype.initialize = function (config) {
     this._minimumProxySleepTime = config.minimumProxySleepTime;
 };
 
-
-ProxyPool.prototype.getProxy = function () {
+ProxyPool.prototype.getProxy = function (successCallback, errorCallback) {
 
     var currentTimeStamp = Date.now();
     var maxProxyLastUsedTime = Date.now() - this._minimumProxySleepTime;
 
-    var proxy = this._dataAccess.getProxy(maxProxyLastUsedTime);
-    if (!proxy) {
-        throw "No available proxy in db";
-    }
+    var successfulDbQuery = function (proxy) {
+        this._dataAccess.updateProxyLastUsedTime(proxy, currentTimeStamp);
+        successCallback(proxy)
+    };
 
-    this._dataAccess.updateProxyLastUsedTime(proxy, currentTimeStamp);
+    this._dataAccess.getProxy(maxProxyLastUsedTime, successfulDbQuery, errorCallback);
 };
 
 

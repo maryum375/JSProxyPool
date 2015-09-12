@@ -5,21 +5,25 @@ function MongoAccess(mongoConnectionString, proxiesCollectionName) {
     this._proxiesCollectionName = proxiesCollectionName;
 }
 
-MongoAccess.prototype.getProxy = function (maxLastUsedTime) {
+MongoAccess.prototype.getProxy = function (maxLastUsedTime,successCallback,errorCallback) {
     var collection = this._monkInstance.get(this._proxiesCollectionName);
 
     var findCallback = function (err, docs) {
         if (err) {
             /* Failed to get proxy from db */
             console.log(err);
+            errorCallback(err);
         }
 
         if (docs != null) {
-            var proxy = {};
-            /* TODO Get last used proxy */
+            var proxy = {};/* TODO Get last used proxy */
+
+            successCallback (proxy);
         }
         else {
-            console.log("No proxy that matches the criteria");
+            var errorMessage = "No proxy that matches the criteria";
+            console.log(errorMessage);
+            errorCallback(errorMessage);
         }
     };
     var promise = new Promise(function (resolve, reject) {
