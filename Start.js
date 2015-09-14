@@ -5,9 +5,8 @@ var Proxy = require('./Proxy');
 var config = require('./config');
 
 
-var minimumProxySleepTime = 20 * 1000;
 var mongoDbDataAccess = new MongoAccess(config.dbConnectionString, "proxies");
-var poolConfig = new ProxyPoolConfiguration(mongoDbDataAccess, minimumProxySleepTime);
+var poolConfig = new ProxyPoolConfiguration(mongoDbDataAccess, config.minimumProxySleepTime);
 var pool = new ProxyPool(poolConfig);
 
 var errorCallback = function (err) {
