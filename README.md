@@ -95,7 +95,7 @@ pool.getProxy(function (proxy){
 #### deleteProxy
 Not implemented yet, Will be implemented soon.
 
-##License
+## License
 
 
 MIT
