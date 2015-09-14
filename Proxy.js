@@ -10,4 +10,12 @@ Proxy.prototype.toString = function () {
     return this._address + ":" + this._port;
 };
 
+Proxy.compare = function (proxy1,proxy2) {
+    if (proxy1._lastUsedTime < proxy2._lastUsedTime)
+        return -1;
+    if (proxy1._lastUsedTime > proxy2._lastUsedTime)
+        return 1;
+    return 0;
+}
+
 module.exports = Proxy;
