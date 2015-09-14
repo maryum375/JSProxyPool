@@ -9,9 +9,9 @@ JSProxyPool is a lightweight and simple NodeJS library that handles the manageme
 
 0.1 (alpha)
 
-## Feachers
+## Features
 
-* Fully compatible to work with **multiple databases**. [will be explained later]
+* Fully compatible with **various databases**. [will be explained later]
 * **Simple** to use and ultra **reliable**
 * set a resting interval for a proxy to **prevent overuse** of a single proxy.
 
@@ -43,6 +43,13 @@ The method should call successCallback function on success with the proxy that w
 updateProxyLastUsedTime (proxy, usedTime);
 ```
 Updates the given proxy's _lastUsedTime property to the given usedTime.
+
+## Installation
+
+To add the library to your project just run the npm command:
+```sh
+$ npm install proxy-pool
+```
 
 ## Proxy Pool Usage
 
