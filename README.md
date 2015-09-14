@@ -1,9 +1,9 @@
 # JSProxyPool
 
-JSProxyPool is a lightwaight and simple NodeJS library that handles the management of a pool of proxies.
+JSProxyPool is a lightweight and simple NodeJS library that handles the management of a pool of proxies.
 
-  - It handles the db access on its own, fully transpatent to the client.
-  - Fully competible to changes and tweaks to match any pool using application.
+  - It handles the db access on its own, fully transparent to the client.
+  - Fully compatible to changes and tweaks to match any pool using application.
 
 ## Version
 
@@ -11,7 +11,7 @@ JSProxyPool is a lightwaight and simple NodeJS library that handles the manageme
 
 ## Feachers
 
-* Fully competible to work with **multiple databases**. [will be explained later]
+* Fully compatible to work with **multiple databases**. [will be explained later]
 * **Simple** to use and ultra **reliable**
 * set a resting interval for a proxy to **prevent overuse** of a single proxy.
 
@@ -25,7 +25,7 @@ To implement a new database access all you need to do is implement the following
 /* Gets a proxy from the database */
 getProxy (maxLastUsedTime, successCallback, errorCallback);
 ```
-Gets a proxy from the database that its last use time was before the maxLastUsedTime (timstamp).
+Gets a proxy from the database that its last use time was before the maxLastUsedTime (timestamp).
 The method should call successCallback function on success with the result proxy as parameter, or errorCallback with error message as parameter.
 
 #### addProxy
@@ -53,7 +53,7 @@ To create a configuration instance you should first create a data access instanc
 The configuration instance constructor gets the data access instance and a number that represents the number of seconds the proxy should rest after it made a request (this is used to not overuse a single proxy).
 ```sh
 var mongoDbDataAccess = new MongoAccess("myMongoDbConnectionString", "myProxiesCollectionName");
-var poolConfig = new ProxyPoolConfiguration(mongoDbDataAccess, 20*1000 /* Rest time in miliseconds */);
+var poolConfig = new ProxyPoolConfiguration(mongoDbDataAccess, 20*1000 /* Rest time in milliseconds */);
 var pool = new ProxyPool(poolConfig);
 ```
 
