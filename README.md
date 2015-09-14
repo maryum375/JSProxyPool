@@ -1,23 +1,19 @@
 # JSProxyPool
----
 
 JSProxyPool is a lightwaight and simple NodeJS library that handles the management of a pool of proxies.
 
   - It handles the db access on its own, fully transpatent to the client.
   - Fully competible to changes and tweaks to match any pool using application.
----
 ## Version
 
 0.1 (alpha)
 
----
 ## Feachers
 
 * Fully competible to work with **multiple databases**. [will be explained later]
 * **Simple** to use and ultra **reliable**
 * set a resting interval for a proxy to **prevent overuse** of a single proxy.
 
----
 ## DB compatibility
 DataAccess folder contains classes for every database. for now only **MongoDB** is implemented, but feel free to implement your own implementation for other databases.
 
@@ -47,7 +43,6 @@ updateProxyLastUsedTime (proxy, usedTime);
 ```
 Updates the given proxy's _lastUsedTime property to the given usedTime.
 
----
 ## Proxy Pool Usage
 
 The ProxyPool constructor gets a **ProxyPoolConfiguration** instance as parameter.
@@ -92,14 +87,11 @@ pool.getProxy(function (proxy){
 #### deleteProxy
 Not implemented yet, Will be implemented soon.
 
----
-License
-----
+##License
 
 
 MIT
 
-----
 
 
 **Feel free to fork and contribute :)**
