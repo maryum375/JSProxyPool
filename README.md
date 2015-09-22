@@ -53,22 +53,26 @@ $ npm install proxy-pool
 
 ## Proxy Pool Usage
 
+First require the **proxy-pool** library:
+```js
+var jsProxyPool = require("proxy-pool");
+```
 The ProxyPool constructor gets a **ProxyPoolConfiguration** instance as parameter.
 ProxyPoolConfiguration contains all the configurations and constants the pool needs to operate.
 
 To create a configuration instance you should first create a data access instance that is used to access the desired db.
 The configuration instance constructor gets the data access instance and a number that represents the number of seconds the proxy should rest after it made a request (this is used to not overuse a single proxy).
 ```sh
-var mongoDbDataAccess = new MongoAccess("myMongoDbConnectionString", "myProxiesCollectionName");
-var poolConfig = new ProxyPoolConfiguration(mongoDbDataAccess, 20*1000 /* Rest time in milliseconds */);
-var pool = new ProxyPool(poolConfig);
+var mongoDbDataAccess = new jsProxyPool.MongoAccess("myMongoDbConnectionString", "myProxiesCollectionName");
+var poolConfig = new jsProxyPool.ProxyPoolConfiguration(mongoDbDataAccess, 20*1000 /* Rest time in milliseconds */);
+var pool = new jsProxyPool.ProxyPool(poolConfig);
 ```
 
 #### addProxy
 
 Adds a new 'Proxy' object to the pool
 ```js
-var proxy = new Proxy('address', 'port');
+var proxy = new jsProxyPool.Proxy('address', 'port');
 ```
 
 call addProxy
