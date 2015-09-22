@@ -34,7 +34,6 @@ MongoAccess.prototype.getProxy = function (maxLastUsedTime, successCallback, err
     var min = collection.find({
         _lastUsedTime: { $lt: maxLastUsedTime }
     }, findCallback);
-    console.log(min);
 };
 
 MongoAccess.prototype.updateProxyLastUsedTime = function (proxy, usedTime) {
