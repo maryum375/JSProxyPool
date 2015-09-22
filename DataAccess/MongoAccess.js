@@ -16,6 +16,7 @@ MongoAccess.prototype.getProxy = function (maxLastUsedTime, successCallback, err
             /* Failed to get proxy from db */
             console.log(err);
             errorCallback(err);
+			return;
         }
 
         if (docs !== null && docs.length !== 0) {
