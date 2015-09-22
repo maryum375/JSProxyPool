@@ -5,10 +5,6 @@ JSProxyPool is a lightweight and simple NodeJS library that handles the manageme
   - It handles the db access on its own, fully transparent to the client.
   - Fully compatible to changes and tweaks to match any pool using application.
 
-## Version
-
-0.1 (alpha)
-
 ## Features
 
 * Fully compatible with **various databases**. [will be explained later]
