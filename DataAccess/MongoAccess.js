@@ -91,9 +91,11 @@ MongoAccess.prototype.isProxyExists = function (proxy, callback) {
                 _port: proxy._port
             }
         ]
-    }, findCallback).limit(1);
+    }, findCallback);
 
 };
+
+//MongoAccess.prototype.markProxyInactive
 
 MongoAccess.prototype._checkProxyType = function (proxy) {
     if (!(proxy instanceof Proxy)) {
