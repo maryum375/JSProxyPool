@@ -33,7 +33,9 @@ MongoAccess.prototype.getProxy = function (maxLastUsedTime, callback) {
 
 
     collection.find({
-        _lastUsedTime: {$lt: maxLastUsedTime}
+        $and: [
+            {_lastUsedTime: {$lt: maxLastUsedTime}},
+            {_active: true}]
     }, findCallback);
 };
 
@@ -85,21 +87,41 @@ MongoAccess.prototype.isProxyExists = function (proxy, callback) {
     var collection = this._monkInstance.get(this._proxiesCollectionName);
     collection.find({
         $and: [
-            {
-                _address: proxy._address
-            }, {
-                _port: proxy._port
-            }
+            {_address: proxy._address},
+            {_port: proxy._port}
         ]
     }, findCallback);
 
 };
 
-//MongoAccess.prototype.markProxyInactive
+MongoAccess.prototype.markProxyInactive = function (proxy) {
+
+    this._checkProxyType(proxy);
+
+    var collection = this._monkInstance.get(this._proxiesCollectionName);
+    collection.findAndModify(
+        {
+            query: {
+                $and: [
+                    {
+                        _address: proxy._address
+                    },
+                    {
+                        _port: proxy._port
+                    }
+                ]
+            }, update: {
+            $set: {
+                _active: false
+            }
+        }
+        });
+};
 
 MongoAccess.prototype._checkProxyType = function (proxy) {
-    if (!(proxy instanceof Proxy)) {
+    if (!(Object.isProxy(proxy))) {
         throw "argument is not of required type.";
+        //console.log("argument is not of required type.");
     }
 };
 

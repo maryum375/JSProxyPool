@@ -9,6 +9,8 @@ ProxyPool.prototype.initialize = function (config) {
 };
 
 ProxyPool.prototype.addProxy = function (proxy, callback) {
+
+    var currentPool = this;
     this._dataAccess.isProxyExists(proxy, function (error, proxyFromDb) {
         if (error) {
             callback(error);
@@ -20,7 +22,7 @@ ProxyPool.prototype.addProxy = function (proxy, callback) {
         }
         else {
             /* Proxy was just added to db */
-            this._dataAccess.addProxy(proxy, callback);
+            currentPool._dataAccess.addProxy(proxy, callback);
         }
     })
 };
@@ -37,12 +39,15 @@ ProxyPool.prototype.getProxy = function (callback) {
             return;
         }
 
-        //TODO This is not the current pool it is something else. Fix it
         currentPool._dataAccess.updateProxyLastUsedTime(proxy, currentTimeStamp);
         callback(null, proxy)
     };
 
     this._dataAccess.getProxy(maxProxyLastUsedTime, dbCallback);
+};
+
+ProxyPool.prototype.markProxyInactive =function (proxy){
+    this._dataAccess.markProxyInactive (proxy);
 };
 
 

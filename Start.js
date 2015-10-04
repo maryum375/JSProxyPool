@@ -32,6 +32,9 @@ var addProxy = function (address, port) {
     pool.addProxy(proxy, addingProxyCallback);
 };
 
+proxy = new Proxy("202.22.195.193", "1080");
+pool.markProxyInactive(proxy);
+
 //addProxy("202.22.195.193", "1080");
 
 //addProxy("190.109.164.81", "1080");
