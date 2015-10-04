@@ -6,6 +6,7 @@ function MongoAccess(mongoConnectionString, proxiesCollectionName) {
     this._proxiesCollectionName = proxiesCollectionName;
 }
 
+/* Gets a proxy from the database that its last use time was before the maxLastUsedTime (timestamp). */
 MongoAccess.prototype.getProxy = function (maxLastUsedTime, callback) {
     var collection = this._monkInstance.get(this._proxiesCollectionName);
 
@@ -31,12 +32,15 @@ MongoAccess.prototype.getProxy = function (maxLastUsedTime, callback) {
     };
 
 
-    var min = collection.find({
+    collection.find({
         _lastUsedTime: {$lt: maxLastUsedTime}
     }, findCallback);
 };
 
+/* Updates the given proxy’s _lastUsedTime property to the given usedTime. */
 MongoAccess.prototype.updateProxyLastUsedTime = function (proxy, usedTime) {
+
+    this._checkProxyType(proxy);
 
     if (proxy._lastUsedTime === undefined) {
         throw "argument is not of required type.";
@@ -51,15 +55,50 @@ MongoAccess.prototype.updateProxyLastUsedTime = function (proxy, usedTime) {
     });
 };
 
-
+/* Adds a new proxy to the database. */
 MongoAccess.prototype.addProxy = function (proxy, callback) {
-    if (!(proxy instanceof Proxy)) {
-        throw "argument is not of required type.";
-    }
+    this._checkProxyType(proxy);
 
     var collection = this._monkInstance.get(this._proxiesCollectionName);
     collection.insert(proxy, callback);
 };
 
+/* Checks if the proxy exists in the db. If exists returns it, else returns false */
+MongoAccess.prototype.isProxyExists = function (proxy, callback) {
+    this._checkProxyType(proxy);
+
+    var findCallback = function (err, docs) {
+        if (err) {
+            callback(err);
+            return;
+        }
+
+
+        if (docs !== null && docs.length !== 0) {
+            callback(null, docs[0]);
+        }
+        else {
+            callback(null, false);
+        }
+    };
+
+    var collection = this._monkInstance.get(this._proxiesCollectionName);
+    collection.find({
+        $and: [
+            {
+                _address: proxy._address
+            }, {
+                _port: proxy._port
+            }
+        ]
+    }, findCallback).limit(1);
+
+};
+
+MongoAccess.prototype._checkProxyType = function (proxy) {
+    if (!(proxy instanceof Proxy)) {
+        throw "argument is not of required type.";
+    }
+};
 
 module.exports = MongoAccess;

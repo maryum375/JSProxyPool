@@ -9,7 +9,20 @@ ProxyPool.prototype.initialize = function (config) {
 };
 
 ProxyPool.prototype.addProxy = function (proxy, callback) {
-    this._dataAccess.addProxy(proxy, callback);
+    this._dataAccess.isProxyExists(proxy, function (error, proxyFromDb) {
+        if (error) {
+            callback(error);
+            return;
+        }
+        if (proxyFromDb) {
+            /* Proxy was already in db. */
+            callback(proxyFromDb)
+        }
+        else {
+            /* Proxy was just added to db */
+            this._dataAccess.addProxy(proxy, callback);
+        }
+    })
 };
 
 ProxyPool.prototype.getProxy = function (callback) {
@@ -19,8 +32,8 @@ ProxyPool.prototype.getProxy = function (callback) {
     var currentPool = this;
 
     var dbCallback = function (error, proxy) {
-        if (error){
-            callback (error);
+        if (error) {
+            callback(error);
             return;
         }
 

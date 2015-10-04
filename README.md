@@ -40,6 +40,13 @@ updateProxyLastUsedTime (proxy, usedTime);
 ```
 Updates the given proxy's _lastUsedTime property to the given usedTime.
 
+#### isProxyExists
+```js
+/* Adds a new proxy to the database */
+isProxyExists (proxy, callback);
+```
+Checks if the proxy exists in the db. The method calls the ***callback*** function  with error as first parameter and the proxy object from the db, if exists.
+
 ## Installation
 
 To add the library to your project just run the npm command:
