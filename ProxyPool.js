@@ -18,7 +18,7 @@ ProxyPool.prototype.addProxy = function (proxy, callback) {
         }
         if (proxyFromDb) {
             /* Proxy was already in db. */
-            callback(proxyFromDb)
+            callback(null, proxyFromDb)
         }
         else {
             /* Proxy was just added to db */
@@ -46,8 +46,8 @@ ProxyPool.prototype.getProxy = function (callback) {
     this._dataAccess.getProxy(maxProxyLastUsedTime, dbCallback);
 };
 
-ProxyPool.prototype.markProxyInactive =function (proxy){
-    this._dataAccess.markProxyInactive (proxy);
+ProxyPool.prototype.markProxyInactive = function (proxy) {
+    this._dataAccess.markProxyInactive(proxy);
 };
 
 
