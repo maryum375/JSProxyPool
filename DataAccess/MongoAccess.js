@@ -6,7 +6,7 @@ function MongoAccess(mongoConnectionString, proxiesCollectionName) {
     this._proxiesCollectionName = proxiesCollectionName;
 }
 
-MongoAccess.prototype.getProxy = function (maxLastUsedTime, successCallback, errorCallback) {
+MongoAccess.prototype.getProxy = function (maxLastUsedTime, callback) {
     var collection = this._monkInstance.get(this._proxiesCollectionName);
 
 
@@ -15,24 +15,24 @@ MongoAccess.prototype.getProxy = function (maxLastUsedTime, successCallback, err
         if (err) {
             /* Failed to get proxy from db */
             console.log(err);
-            errorCallback(err);
-			return;
+            callback(err);
+            return;
         }
 
         if (docs !== null && docs.length !== 0) {
             var proxy = docs.sort(Proxy.compare)[0];
-            successCallback(proxy);
+            callback(null, proxy);
         }
         else {
             var errorMessage = "No proxy that matches the criteria";
             console.log(errorMessage);
-            errorCallback(errorMessage);
+            callback(errorMessage);
         }
     };
 
 
     var min = collection.find({
-        _lastUsedTime: { $lt: maxLastUsedTime }
+        _lastUsedTime: {$lt: maxLastUsedTime}
     }, findCallback);
 };
 
@@ -42,7 +42,7 @@ MongoAccess.prototype.updateProxyLastUsedTime = function (proxy, usedTime) {
         throw "argument is not of required type.";
     }
 
-    proxy._lastUsedTime= usedTime;
+    proxy._lastUsedTime = usedTime;
 
     var collection = this._monkInstance.get(this._proxiesCollectionName);
 
@@ -52,21 +52,13 @@ MongoAccess.prototype.updateProxyLastUsedTime = function (proxy, usedTime) {
 };
 
 
-MongoAccess.prototype.addProxy = function (proxy, successCallback, errorCallback) {
+MongoAccess.prototype.addProxy = function (proxy, callback) {
     if (!(proxy instanceof Proxy)) {
         throw "argument is not of required type.";
     }
 
     var collection = this._monkInstance.get(this._proxiesCollectionName);
-    collection.insert(proxy, function (err, doc) {
-        if (err) {
-            errorCallback(err);
-            return;
-        }
-        if (doc) {
-            successCallback(doc);
-        }
-    });
+    collection.insert(proxy, callback);
 };
 
 

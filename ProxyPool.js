@@ -8,23 +8,28 @@ ProxyPool.prototype.initialize = function (config) {
     this._minimumProxySleepTime = config.minimumProxySleepTime;
 };
 
-ProxyPool.prototype.addProxy = function (proxy,successCallback, errorCallback){
-    this._dataAccess.addProxy (proxy,successCallback,errorCallback);
+ProxyPool.prototype.addProxy = function (proxy, callback) {
+    this._dataAccess.addProxy(proxy, callback);
 };
 
-ProxyPool.prototype.getProxy = function (successCallback, errorCallback) {
+ProxyPool.prototype.getProxy = function (callback) {
 
     var currentTimeStamp = Date.now();
     var maxProxyLastUsedTime = Date.now() - this._minimumProxySleepTime;
     var currentPool = this;
 
-    var successfulDbQuery = function (proxy) {
+    var dbCallback = function (error, proxy) {
+        if (error){
+            callback (error);
+            return;
+        }
+
         //TODO This is not the current pool it is something else. Fix it
         currentPool._dataAccess.updateProxyLastUsedTime(proxy, currentTimeStamp);
-        successCallback(proxy)
+        callback(null, proxy)
     };
 
-    this._dataAccess.getProxy(maxProxyLastUsedTime, successfulDbQuery, errorCallback);
+    this._dataAccess.getProxy(maxProxyLastUsedTime, dbCallback);
 };
 
 
