@@ -12,7 +12,7 @@ JSProxyPool is a lightweight and simple NodeJS library that handles the manageme
 * set a resting interval for a proxy to **prevent overuse** of a single proxy.
 
 ## DB compatibility
-DataAccess folder contains classes for every database. for now only **MongoDB** is implemented, but feel free to implement your own implementation for other databases.
+DataAccess folder contains classes for every database. for now only **MongoDB** is implemented, but feel free to create your own implementation for other databases.
 
 To implement a new database access all you need to do is implement the following functions and it will work like a charm:
 
@@ -46,6 +46,13 @@ Updates the given proxy's _lastUsedTime property to the given usedTime.
 isProxyExists (proxy, callback);
 ```
 Checks if the proxy exists in the db. The method calls the ***callback*** function  with error as first parameter and the proxy object from the db, if exists.
+
+#### markProxyInactive
+```js
+/* Marks the given proxy inactive. */
+markProxyInactive (proxy);
+```
+This method marks the given proxy as inactive and will not be used any more.
 
 ## Installation
 
