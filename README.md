@@ -19,18 +19,18 @@ To implement a new database access all you need to do is implement the following
 #### getProxy
 ```js
 /* Gets a proxy from the database */
-getProxy (maxLastUsedTime, successCallback, errorCallback);
+getProxy (maxLastUsedTime, callback);
 ```
-Gets a proxy from the database that its last use time was before the maxLastUsedTime (timestamp).
-The method should call successCallback function on success with the result proxy as parameter, or errorCallback with error message as parameter.
+Gets a proxy from the database that its last use time was before the ***maxLastUsedTime*** (timestamp).
+The method calls the ***callback*** function with error as first parameter and the proxy object as second.
 
 #### addProxy
 ```js
 /* Adds a new proxy to the database */
-addProxy (proxy, successCallback, errorCallback);
+addProxy (proxy, callback);
 ```
 Adds a new proxy to the database.
-The method should call successCallback function on success with the proxy that was just added as parameter, or errorCallback with error message as parameter.
+The method calls the ***callback*** function with error as first parameter and the proxy object that was just added as second.
 
 
 #### updateProxyLastUsedTime
@@ -67,16 +67,20 @@ var pool = new jsProxyPool.ProxyPool(poolConfig);
 #### addProxy
 
 Adds a new 'Proxy' object to the pool
+
+First create a proxy object to add:
 ```js
 var proxy = new jsProxyPool.Proxy('address', 'port');
 ```
 
-call addProxy
+Then call addProxy:
 ```js
-pool.addProxy (proxy,function (proxy){
+pool.addProxy (proxy,function (error, proxy){
+    if (error){
+        /* Code to be executed on error */
+        return;
+    }
     /* Code to be executed after proxy was added */
-}, function (error){
-    /* Code to be executed on error */
 });
 ```
 
@@ -85,9 +89,11 @@ pool.addProxy (proxy,function (proxy){
 Gets a new 'Proxy' that is ready to use
 ```js
 pool.getProxy(function (proxy){
-    /* Code to be executed after proxy was added */
-}, function (error){
-    /* Code to be executed on error */
+    if (error){
+        /* Code to be executed on error */
+        return;
+    }
+    /* Code to be executed when we got a proxy from the pool */
 });
 ```
 >This method automatically calls **updateProxyLastUsedTime** to set that this proxy was just used to make a request.
