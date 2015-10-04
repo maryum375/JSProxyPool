@@ -18,7 +18,7 @@ ProxyPool.prototype.addProxy = function (proxy, callback) {
         }
         if (proxyFromDb) {
             /* Proxy was already in db. */
-            callback(null, proxyFromDb)
+            callback(null, Object.convertToProxy(proxyFromDb))
         }
         else {
             /* Proxy was just added to db */

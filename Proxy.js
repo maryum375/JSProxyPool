@@ -25,4 +25,22 @@ Object.isProxy = function (obj) {
 
 };
 
+Object.convertToProxy = function (obj){
+    if (!obj.isProxy (obj)){
+        throw "This is not a proxy object. Conversion failed.";
+    }
+
+     if (obj.hasOwnProperty("_address") &&
+     obj.hasOwnProperty("_port")&&
+     obj.hasOwnProperty("_active")&&
+     obj.hasOwnProperty("_lastUsedTime")){
+         var p = new Proxy(obj._address,obj._port);
+         p._active = obj._active;
+         p._lastUsedTime = obj._lastUsedTime;
+         return p;
+     }
+
+    throw "This object doesn't contain all the properties of a proxy object. Conversion failed.";
+};
+
 module.exports = Proxy;
