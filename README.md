@@ -72,7 +72,7 @@ ProxyPoolConfiguration contains all the configurations and constants the pool ne
 
 To create a configuration instance you should first create a data access instance that is used to access the desired db.
 The configuration instance constructor gets the data access instance and a number that represents the number of seconds the proxy should rest after it made a request (this is used to not overuse a single proxy).
-```sh
+```js
 var mongoDbDataAccess = new jsProxyPool.MongoAccess("myMongoDbConnectionString", "myProxiesCollectionName");
 var poolConfig = new jsProxyPool.ProxyPoolConfiguration(mongoDbDataAccess, 20*1000 /* Rest time in milliseconds */);
 var pool = new jsProxyPool.ProxyPool(poolConfig);
@@ -112,8 +112,11 @@ pool.getProxy(function (proxy){
 ```
 >This method automatically calls **updateProxyLastUsedTime** to set that this proxy was just used to make a request.
 
-#### deleteProxy
-Not implemented yet, Will be implemented soon.
+#### markProxyInactive
+Marks the proxy as inactive to never use it again. Call this function if the proxy is not working any more.
+```js
+pool.markProxyInactive(proxy);
+```
 
 ## License
 
