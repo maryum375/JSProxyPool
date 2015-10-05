@@ -118,6 +118,11 @@ Marks the proxy as inactive to never use it again. Call this function if the pro
 pool.markProxyInactive(proxy);
 ```
 
+### Helpers
+
+If you don't have any proxies to fill the pool with, it is recommended to refer [Refill-Proxy-Pool](https://github.com/maryum375/refill-proxy-pool) library in order to fill the pool with free proxies.
+>Simple NodeJS code that uses HMA-Proxy-Scraper and Xroxy-Proxy-Scraper to scrape free proxies and insert them to the JSProxyPool db.
+
 ## License
 
 
