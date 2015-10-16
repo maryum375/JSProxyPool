@@ -33,7 +33,7 @@ var addProxy = function (address, port) {
 };
 
 proxy = new Proxy("202.22.195.193", "1080");
-pool.markProxyInactive(proxy);
+pool.reportProxyActivity(proxy);
 
 //addProxy("202.22.195.193", "1080");
 

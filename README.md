@@ -47,12 +47,12 @@ isProxyExists (proxy, callback);
 ```
 Checks if the proxy exists in the db. The method calls the ***callback*** function  with error as first parameter and the proxy object from the db, if exists.
 
-#### markProxyInactive
+#### reportProxyActivity
 ```js
-/* Marks the given proxy inactive. */
-markProxyInactive (proxy);
+/* Reports the given proxy activity state. */
+markProxyInactive (proxy,active);
 ```
-This method marks the given proxy as inactive and will not be used any more.
+This method updates the given proxy activity state according to the active paramter. When the proxy is inactive it and will not be used any more for future requests.
 
 ## Installation
 
@@ -112,10 +112,10 @@ pool.getProxy(function (proxy){
 ```
 >This method automatically calls **updateProxyLastUsedTime** to set that this proxy was just used to make a request.
 
-#### markProxyInactive
-Marks the proxy as inactive to never use it again. Call this function if the proxy is not working any more.
+#### reportProxyActivity
+Updates the proxy active state according to the active parameter. Call this function if the proxy is not working any more.
 ```js
-pool.markProxyInactive(proxy);
+pool.reportProxyActivity(proxy,active);
 ```
 
 ### Helpers

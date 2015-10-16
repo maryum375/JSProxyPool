@@ -94,8 +94,8 @@ MongoAccess.prototype.isProxyExists = function (proxy, callback) {
 
 };
 
-/* Marks the given proxy inactive. */
-MongoAccess.prototype.markProxyInactive = function (proxy) {
+/* Reports the given proxy activity state. */
+MongoAccess.prototype.reportProxyActivity = function (proxy, active) {
 
     this._checkProxyType(proxy);
 
@@ -113,7 +113,7 @@ MongoAccess.prototype.markProxyInactive = function (proxy) {
                 ]
             }, update: {
             $set: {
-                _active: false
+                _active: active
             }
         }
         });

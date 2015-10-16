@@ -46,8 +46,8 @@ ProxyPool.prototype.getProxy = function (callback) {
     this._dataAccess.getProxy(maxProxyLastUsedTime, dbCallback);
 };
 
-ProxyPool.prototype.markProxyInactive = function (proxy) {
-    this._dataAccess.markProxyInactive(proxy);
+ProxyPool.prototype.reportProxyActivity = function (proxy,active) {
+    this._dataAccess.reportProxyActivity(proxy,active);
 };
 
 
