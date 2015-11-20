@@ -1,3 +1,5 @@
+var Proxy = require('./Proxy');
+
 function ProxyPool(config) {
     this.initialize(config);
 }
@@ -18,7 +20,7 @@ ProxyPool.prototype.addProxy = function (proxy, callback) {
         }
         if (proxyFromDb) {
             /* Proxy was already in db. */
-            callback(null, Object.convertToProxy(proxyFromDb))
+            callback(null, Proxy.convertToProxy(proxyFromDb))
         }
         else {
             /* Proxy was just added to db */
