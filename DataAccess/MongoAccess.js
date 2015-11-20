@@ -120,7 +120,7 @@ MongoAccess.prototype.reportProxyActivity = function (proxy, active) {
 };
 
 MongoAccess.prototype._checkProxyType = function (proxy) {
-    if (!(Object.isProxy(proxy))) {
+    if (!(Proxy.isProxy(proxy))) {
         throw "argument is not of required type.";
         //console.log("argument is not of required type.");
     }
