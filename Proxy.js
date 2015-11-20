@@ -20,13 +20,13 @@ Proxy.compare = function (proxy1, proxy2) {
     return 0;
 };
 
-Object.prototype.isProxy = function (obj) {
+Proxy.isProxy = function (obj) {
     return (obj.hasOwnProperty("_address") && obj.hasOwnProperty("_port"));
 
 };
 
-Object.prototype.convertToProxy = function (obj){
-    if (!obj.isProxy (obj)){
+Proxy.convertToProxy = function (obj){
+    if (!Proxy.isProxy (obj)){
         throw "This is not a proxy object. Conversion failed.";
     }
 
