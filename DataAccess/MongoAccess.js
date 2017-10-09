@@ -7,12 +7,12 @@ function MongoAccess(mongoConnectionString, proxiesCollectionName) {
 }
 
 /* Gets a proxy from the database that its last use time was before the maxLastUsedTime (timestamp). */
-MongoAccess.prototype.getProxy = function (maxLastUsedTime, callback) {
+MongoAccess.prototype.getProxy = function(maxLastUsedTime, callback) {
     var collection = this._monkInstance.get(this._proxiesCollectionName);
 
 
     /* Handles proxies find results */
-    var findCallback = function (err, docs) {
+    var findCallback = function(err, docs) {
         if (err) {
             /* Failed to get proxy from db */
             console.log(err);
@@ -23,8 +23,7 @@ MongoAccess.prototype.getProxy = function (maxLastUsedTime, callback) {
         if (docs !== null && docs.length !== 0) {
             var proxy = docs.sort(Proxy.compare)[0];
             callback(null, proxy);
-        }
-        else {
+        } else {
             var errorMessage = "No proxy that matches the criteria";
             console.log(errorMessage);
             callback(errorMessage);
@@ -34,13 +33,14 @@ MongoAccess.prototype.getProxy = function (maxLastUsedTime, callback) {
 
     collection.find({
         $and: [
-            {_lastUsedTime: {$lt: maxLastUsedTime}},
-            {_active: true}]
+            { _lastUsedTime: { $lt: maxLastUsedTime } },
+            { _active: true }
+        ]
     }, findCallback);
 };
 
-/* Updates the given proxy’s _lastUsedTime property to the given usedTime. */
-MongoAccess.prototype.updateProxyLastUsedTime = function (proxy, usedTime) {
+/* Updates the given proxyï¿½s _lastUsedTime property to the given usedTime. */
+MongoAccess.prototype.updateProxyLastUsedTime = function(proxy, usedTime) {
 
     this._checkProxyType(proxy);
 
@@ -58,7 +58,7 @@ MongoAccess.prototype.updateProxyLastUsedTime = function (proxy, usedTime) {
 };
 
 /* Adds a new proxy to the database. */
-MongoAccess.prototype.addProxy = function (proxy, callback) {
+MongoAccess.prototype.addProxy = function(proxy, callback) {
     this._checkProxyType(proxy);
 
     var collection = this._monkInstance.get(this._proxiesCollectionName);
@@ -66,10 +66,10 @@ MongoAccess.prototype.addProxy = function (proxy, callback) {
 };
 
 /* Checks if the proxy exists in the db. If exists returns it, else returns false */
-MongoAccess.prototype.isProxyExists = function (proxy, callback) {
+MongoAccess.prototype.isProxyExists = function(proxy, callback) {
     this._checkProxyType(proxy);
 
-    var findCallback = function (err, docs) {
+    var findCallback = function(err, docs) {
         if (err) {
             callback(err);
             return;
@@ -78,8 +78,7 @@ MongoAccess.prototype.isProxyExists = function (proxy, callback) {
 
         if (docs !== null && docs.length !== 0) {
             callback(null, docs[0]);
-        }
-        else {
+        } else {
             callback(null, false);
         }
     };
@@ -87,38 +86,33 @@ MongoAccess.prototype.isProxyExists = function (proxy, callback) {
     var collection = this._monkInstance.get(this._proxiesCollectionName);
     collection.find({
         $and: [
-            {_address: proxy._address},
-            {_port: proxy._port}
+            { _address: proxy._address },
+            { _port: proxy._port }
         ]
     }, findCallback);
 
 };
 
 /* Reports the given proxy activity state. */
-MongoAccess.prototype.reportProxyActivity = function (proxy, active) {
+MongoAccess.prototype.reportProxyActivity = function(proxy, active) {
 
     this._checkProxyType(proxy);
 
     var collection = this._monkInstance.get(this._proxiesCollectionName);
     collection.findOneAndUpdate({
-        query: {
-            $and: [{
-                    _address: proxy._address
-                },
-                {
-                    _port: proxy._port
-                }
-            ]
-        },
-        update: {
-            $set: {
-                _active: active
-            }
-        }
+        $and: [
+            { _address: proxy._address },
+            { _port: proxy._port }
+        ]
+    }, {
+        $set: { _active: active }
+    }).catch((err) => {
+        console.log(err);
+        //error, its handled now!
     });
 };
 
-MongoAccess.prototype._checkProxyType = function (proxy) {
+MongoAccess.prototype._checkProxyType = function(proxy) {
     if (!(Proxy.isProxy(proxy))) {
         throw "argument is not of required type.";
         //console.log("argument is not of required type.");
