@@ -52,7 +52,7 @@ MongoAccess.prototype.updateProxyLastUsedTime = function (proxy, usedTime) {
 
     var collection = this._monkInstance.get(this._proxiesCollectionName);
 
-    collection.updateById(proxy._id, proxy, function () {
+    collection.update({ _id: proxy._id.toString() }, proxy, function() {
         console.log("_lastUsedTime successfully updated");
     });
 };
@@ -100,23 +100,22 @@ MongoAccess.prototype.reportProxyActivity = function (proxy, active) {
     this._checkProxyType(proxy);
 
     var collection = this._monkInstance.get(this._proxiesCollectionName);
-    collection.findAndModify(
-        {
-            query: {
-                $and: [
-                    {
-                        _address: proxy._address
-                    },
-                    {
-                        _port: proxy._port
-                    }
-                ]
-            }, update: {
+    collection.findOneAndUpdate({
+        query: {
+            $and: [{
+                    _address: proxy._address
+                },
+                {
+                    _port: proxy._port
+                }
+            ]
+        },
+        update: {
             $set: {
                 _active: active
             }
         }
-        });
+    });
 };
 
 MongoAccess.prototype._checkProxyType = function (proxy) {

@@ -1,23 +1,23 @@
 {
-  "name": "proxy-pool",
-  "version": "1.1.9",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/maryum375/JSProxyPool.git"
-  },
-  "author": "maryum375",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/maryum375/JSProxyPool/issues"
-  },
-  "homepage": "https://github.com/maryum375/JSProxyPool",
-  "dependencies": {
-    "mongodb": "^2.0.42",
-    "monk": "^1.0.1"
-  }
+    "name": "proxy-pool",
+    "version": "1.2.2",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/maryum375/JSProxyPool.git"
+    },
+    "author": "maryum375",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/maryum375/JSProxyPool/issues"
+    },
+    "homepage": "https://github.com/maryum375/JSProxyPool",
+    "dependencies": {
+        "mongodb": "^2.0.42",
+        "monk": "^6.0.5"
+    }
 }
