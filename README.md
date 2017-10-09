@@ -50,7 +50,7 @@ Checks if the proxy exists in the db. The method calls the ***callback*** functi
 #### reportProxyActivity
 ```js
 /* Reports the given proxy activity state. */
-markProxyInactive (proxy,active);
+reportProxyActivity (proxy,active);
 ```
 This method updates the given proxy activity state according to the active paramter. When the proxy is inactive it and will not be used any more for future requests.
 
