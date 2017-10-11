@@ -8,8 +8,11 @@ function MongoAccess(mongoConnectionString, proxiesCollectionName) {
 
 /* Gets a proxy from the database that its last use time was before the maxLastUsedTime (timestamp). */
 MongoAccess.prototype.getProxy = function(maxLastUsedTime, callback) {
-    var collection = this._monkInstance.get(this._proxiesCollectionName);
+    return getProxies(maxLastUsedTime, 1, callback);
+};
 
+MongoAccess.prototype.getProxies = function(maxLastUsedTime, count, callback) {
+    var collection = this._monkInstance.get(this._proxiesCollectionName);
 
     /* Handles proxies find results */
     var findCallback = function(err, docs) {
@@ -20,9 +23,9 @@ MongoAccess.prototype.getProxy = function(maxLastUsedTime, callback) {
             return;
         }
 
-        if (docs !== null && docs.length !== 0) {
-            var proxy = docs.sort(Proxy.compare)[0];
-            callback(null, proxy);
+        if (docs !== null && docs.length >= count) {
+            var proxies = docs.sort(Proxy.compare).slice(0, count);
+            callback(null, proxies);
         } else {
             var errorMessage = "No proxy that matches the criteria";
             console.log(errorMessage);
@@ -37,7 +40,7 @@ MongoAccess.prototype.getProxy = function(maxLastUsedTime, callback) {
             { _active: true }
         ]
     }, findCallback);
-};
+}
 
 /* Updates the given proxy�s _lastUsedTime property to the given usedTime. */
 MongoAccess.prototype.updateProxyLastUsedTime = function(proxy, usedTime) {
