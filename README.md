@@ -1,5 +1,7 @@
 # JSProxyPool
 
+[![NPM](https://nodei.co/npm/proxy-pool.png)](https://npmjs.org/package/proxy-pool)
+
 JSProxyPool is a lightweight and simple NodeJS library that handles the management of a pool of proxies.
 
   - It handles the db access on its own, fully transparent to the client.
@@ -23,6 +25,14 @@ getProxy (maxLastUsedTime, callback);
 ```
 Gets a proxy from the database that its last use time was before the ***maxLastUsedTime*** (timestamp).
 The method calls the ***callback*** function with error as first parameter and the proxy object as second.
+
+#### getProxies
+```js
+/* Gets a list of proxies from the database */
+getProxies (count, callback);
+```
+Gets a list of proxies from the database. The amount of proxies in the list will be according to ***count*** (number) parameter.
+The method calls the ***callback*** function with error as first parameter and the proxies array object as second.
 
 #### addProxy
 ```js
