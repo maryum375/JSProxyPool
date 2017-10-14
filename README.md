@@ -1,4 +1,4 @@
-# JSProxyPool ![npm version](https://img.shields.io/npm/v/angular2-busy.svg?style=flat-square)
+# JSProxyPool [![npm version](https://img.shields.io/npm/v/angular2-busy.svg?style=flat-square)](https://npmjs.org/package/proxy-pool)
 
 [![NPM](https://nodei.co/npm/proxy-pool.png)](https://npmjs.org/package/proxy-pool)
 
