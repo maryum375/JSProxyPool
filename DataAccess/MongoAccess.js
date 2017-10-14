@@ -8,7 +8,7 @@ function MongoAccess(mongoConnectionString, proxiesCollectionName) {
 
 /* Gets a proxy from the database that its last use time was before the maxLastUsedTime (timestamp). */
 MongoAccess.prototype.getProxy = function(maxLastUsedTime, callback) {
-    return getProxies(maxLastUsedTime, 1, callback);
+    return this.getProxies(maxLastUsedTime, 1, callback);
 };
 
 MongoAccess.prototype.getProxies = function(maxLastUsedTime, count, callback) {
