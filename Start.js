@@ -9,7 +9,7 @@ var mongoDbDataAccess = new MongoAccess(config.dbConnectionString, "proxies");
 var poolConfig = new ProxyPoolConfiguration(mongoDbDataAccess, config.minimumProxySleepTime);
 var pool = new ProxyPool(poolConfig);
 
-var addingProxyCallback = function (err, proxy) {
+var addingProxyCallback = function(err, proxy) {
     if (err) {
         console.log(err);
         return;
@@ -17,7 +17,7 @@ var addingProxyCallback = function (err, proxy) {
 
     console.log(proxy + " Added");
 };
-var gettingProxyCallback = function (err, proxy) {
+var gettingProxyCallback = function(err, proxy) {
     if (err) {
         console.log(err);
         return;
@@ -26,18 +26,22 @@ var gettingProxyCallback = function (err, proxy) {
     console.log("proxy: " + proxy._address);
 };
 
-var addProxy = function (address, port) {
+var addProxy = function(address, port) {
     proxy = new Proxy(address, port);
 
     pool.addProxy(proxy, addingProxyCallback);
 };
 
-proxy = new Proxy("202.22.195.193", "1080");
-pool.reportProxyActivity(proxy);
+proxy = new Proxy("123.30.75.116", "3128");
+
+var currentTimeStamp = Date.now();
+pool.updateProxyLastCheckTime(proxy, currentTimeStamp, function(proxyFromDB) {
+
+    })
+    // pool.reportProxyActivity(proxy);
 
 //addProxy("202.22.195.193", "1080");
 
 //addProxy("190.109.164.81", "1080");
 
-pool.getProxy(gettingProxyCallback);
-
+// pool.getProxy(gettingProxyCallback);

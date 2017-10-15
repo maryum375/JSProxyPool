@@ -62,6 +62,24 @@ MongoAccess.prototype.updateProxyLastUsedTime = function(proxy, usedTime) {
     });
 };
 
+/* Updates the given proxy�s _lastCheckedTime property to the given usedTime. */
+MongoAccess.prototype.updateProxyLastCheckedTime = function(proxy, checkedTime) {
+
+    this._checkProxyType(proxy);
+
+    if (proxy._lastUsedTime === undefined) {
+        throw "argument is not of required type.";
+    }
+
+    proxy._lastCheckedTime = checkedTime;
+
+    var collection = this._monkInstance.get(this._proxiesCollectionName);
+
+    collection.update({ _id: proxy._id.toString() }, proxy, function() {
+        console.log("_lastCheckedTime successfully updated");
+    });
+};
+
 /* Adds a new proxy to the database. */
 MongoAccess.prototype.addProxy = function(proxy, callback) {
     this._checkProxyType(proxy);
@@ -112,8 +130,7 @@ MongoAccess.prototype.reportProxyActivity = function(proxy, active) {
     }, {
         $set: { _active: active }
     }).catch((err) => {
-        console.log(err);
-        //error, its handled now!
+        console.log("Failed to update proxy activity: " + err);
     });
 };
 

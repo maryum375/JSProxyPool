@@ -69,5 +69,23 @@ ProxyPool.prototype.reportProxyActivity = function(proxy, active) {
     this._dataAccess.reportProxyActivity(proxy, active);
 };
 
+ProxyPool.prototype.updateProxyLastCheckTime = function(proxy, lastCheckedTime, callback) {
+
+    var currentPool = this;
+    this._dataAccess.isProxyExists(proxy, function(error, proxyFromDb) {
+        if (error) {
+            callback(error);
+            return;
+        }
+        if (proxyFromDb) {
+            currentPool._dataAccess.updateProxyLastCheckedTime(proxyFromDb, lastCheckedTime);
+            callback(proxyFromDb);
+        } else {
+            console.log("Proxy doesn't exist in DB");
+            proxyFromDb();
+        }
+    })
+};
+
 
 module.exports = ProxyPool;
