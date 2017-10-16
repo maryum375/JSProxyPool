@@ -74,7 +74,9 @@ ProxyPool.prototype.updateProxyLastCheckTime = function(proxy, lastCheckedTime, 
     this.updateProxy(proxy, { _lastCheckedTime: lastCheckedTime }, callback);
 };
 
-ProxyPool.prototype.updateProxy = this._dataAccess.updateProxy;
+ProxyPool.prototype.updateProxy = function(proxy, newProps, callback) {
+    this._dataAccess.updateProxy(proxy, newProps, callback);
+}
 
 
 module.exports = ProxyPool;
