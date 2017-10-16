@@ -79,10 +79,10 @@ ProxyPool.prototype.updateProxyLastCheckTime = function(proxy, lastCheckedTime, 
         }
         if (proxyFromDb) {
             currentPool._dataAccess.updateProxyLastCheckedTime(proxyFromDb, lastCheckedTime);
-            callback(proxyFromDb);
+            callback(null, proxyFromDb);
         } else {
             console.log("Proxy doesn't exist in DB");
-            proxyFromDb();
+            callback("Proxy doesn't exist in DB");
         }
     })
 };

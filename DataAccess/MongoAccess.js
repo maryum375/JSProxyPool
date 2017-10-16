@@ -134,6 +134,7 @@ MongoAccess.prototype.reportProxyActivity = function(proxy, active) {
     });
 };
 
+/* Checks if the given object is of type Proxy */
 MongoAccess.prototype._checkProxyType = function(proxy) {
     if (!(Proxy.isProxy(proxy))) {
         throw "argument is not of required type.";
