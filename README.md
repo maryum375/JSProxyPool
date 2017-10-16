@@ -1,6 +1,7 @@
 # JSProxyPool [![npm version](https://img.shields.io/npm/v/angular2-busy.svg?style=flat-square)]
 
 [![NPM](https://nodei.co/npm/proxy-pool.png)](https://npmjs.org/package/proxy-pool)
+(https://img.shields.io/npm/dt/proxy-pool.svg?maxAge=25920)](https://www.npmjs.com/package/proxy-pool)
 
 JSProxyPool is a lightweight and simple NodeJS library that handles the management of a pool of proxies.
 
