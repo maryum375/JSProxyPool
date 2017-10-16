@@ -51,8 +51,14 @@ Proxy.convertToProxy = function(obj) {
         obj.hasOwnProperty("_active") &&
         obj.hasOwnProperty("_lastUsedTime")) {
         var p = new Proxy(obj._address, obj._port);
-        p._active = obj._active;
-        p._lastUsedTime = obj._lastUsedTime;
+
+        proxyProperties = Object.getOwnPropertyNames(p);
+        for (let propIndex = 0; propIndex < proxyProperties.length; propIndex++) {
+            var propName = proxyProperties[propIndex];
+            if (obj.hasOwnProperty(propName)) {
+                p[propName] = obj[propName]
+            }
+        }
         return p;
     }
 
