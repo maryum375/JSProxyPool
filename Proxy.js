@@ -21,7 +21,7 @@ function Proxy(address, port) {
     2 = anonymous
     3 = elite
     */
-    this.anonymity = 0;
+    this._anonymity = 0;
 }
 
 Proxy.prototype.toString = function() {

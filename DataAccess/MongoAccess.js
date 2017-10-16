@@ -44,39 +44,24 @@ MongoAccess.prototype.getProxies = function(maxLastUsedTime, count, callback) {
     }, findCallback);
 }
 
-/* Updates the given proxy�s _lastUsedTime property to the given usedTime. */
-MongoAccess.prototype.updateProxyLastUsedTime = function(proxy, usedTime) {
+/* Updates the given proxy with given args. */
+MongoAccess.prototype.updateProxy = function(proxy, newProps, callback) {
 
     this._checkProxyType(proxy);
 
-    if (proxy._lastUsedTime === undefined) {
-        throw "argument is not of required type.";
-    }
-
-    proxy._lastUsedTime = usedTime;
-
     var collection = this._monkInstance.get(this._proxiesCollectionName);
-
-    collection.update({ _id: proxy._id.toString() }, proxy, function() {
-        console.log("_lastUsedTime successfully updated");
-    });
-};
-
-/* Updates the given proxy�s _lastCheckedTime property to the given usedTime. */
-MongoAccess.prototype.updateProxyLastCheckedTime = function(proxy, checkedTime) {
-
-    this._checkProxyType(proxy);
-
-    if (proxy._lastUsedTime === undefined) {
-        throw "argument is not of required type.";
-    }
-
-    proxy._lastCheckedTime = checkedTime;
-
-    var collection = this._monkInstance.get(this._proxiesCollectionName);
-
-    collection.update({ _id: proxy._id.toString() }, proxy, function() {
-        console.log("_lastCheckedTime successfully updated");
+    collection.findOneAndUpdate({
+        $and: [
+            { _address: proxy._address },
+            { _port: proxy._port }
+        ]
+    }, {
+        $set: newProps
+    }).then((updatedProxy) => {
+        callback(null, updatedProxy);
+    }).catch((err) => {
+        console.log("Failed to update proxy: " + err);
+        callback(err)
     });
 };
 
@@ -114,24 +99,6 @@ MongoAccess.prototype.isProxyExists = function(proxy, callback) {
         ]
     }, findCallback);
 
-};
-
-/* Reports the given proxy activity state. */
-MongoAccess.prototype.reportProxyActivity = function(proxy, active) {
-
-    this._checkProxyType(proxy);
-
-    var collection = this._monkInstance.get(this._proxiesCollectionName);
-    collection.findOneAndUpdate({
-        $and: [
-            { _address: proxy._address },
-            { _port: proxy._port }
-        ]
-    }, {
-        $set: { _active: active }
-    }).catch((err) => {
-        console.log("Failed to update proxy activity: " + err);
-    });
 };
 
 /* Checks if the given object is of type Proxy */
