@@ -9,6 +9,19 @@ function Proxy(address, port) {
 
     /* This indicates on the last time (timestamp) this proxy was checked */
     this._lastCheckedTime = 0;
+
+    /* Proxy response speed */
+    this._speed = 0;
+
+    this._country = "";
+
+    /*
+    0 = unknown
+    1 = transparent 
+    2 = anonymous
+    3 = elite
+    */
+    this.anonymity = 0;
 }
 
 Proxy.prototype.toString = function() {
