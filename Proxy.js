@@ -9,6 +9,19 @@ function Proxy(address, port) {
 
     /* This indicates on the last time (timestamp) this proxy was checked */
     this._lastCheckedTime = 0;
+
+    /* Proxy response speed */
+    this._speed = 0;
+
+    this._country = "";
+
+    /*
+    0 = unknown
+    1 = transparent 
+    2 = anonymous
+    3 = elite
+    */
+    this._anonymity = 0;
 }
 
 Proxy.prototype.toString = function() {
@@ -38,8 +51,14 @@ Proxy.convertToProxy = function(obj) {
         obj.hasOwnProperty("_active") &&
         obj.hasOwnProperty("_lastUsedTime")) {
         var p = new Proxy(obj._address, obj._port);
-        p._active = obj._active;
-        p._lastUsedTime = obj._lastUsedTime;
+
+        proxyProperties = Object.getOwnPropertyNames(p);
+        for (let propIndex = 0; propIndex < proxyProperties.length; propIndex++) {
+            var propName = proxyProperties[propIndex];
+            if (obj.hasOwnProperty(propName)) {
+                p[propName] = obj[propName]
+            }
+        }
         return p;
     }
 

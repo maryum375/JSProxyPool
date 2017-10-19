@@ -30,9 +30,9 @@ The method calls the ***callback*** function with error as first parameter and t
 #### getProxies
 ```js
 /* Gets a list of proxies from the database */
-getProxies (count, callback);
+getProxies (maxLastUsedTime, count, callback);
 ```
-Gets a list of proxies from the database. The amount of proxies in the list will be according to ***count*** (number) parameter.
+Gets a list of proxies from the database. The proxies will be only proxies what were used before ***maxLastUsedTime*** (Timestamp) time, and The amount of proxies in the list will be according to ***count*** (number) parameter.
 The method calls the ***callback*** function with error as first parameter and the proxies array object as second.
 
 #### addProxy
@@ -44,12 +44,15 @@ Adds a new proxy to the database.
 The method calls the ***callback*** function with error as first parameter and the proxy object that was just added as second.
 
 
-#### updateProxyLastUsedTime
+#### updateProxy
 ```js
-/* Adds a new proxy to the database */
-updateProxyLastUsedTime (proxy, usedTime);
+/* Updates the given proxy with given args. */
+updateProxy (proxy, newProps, callback);
 ```
-Updates the given proxy's _lastUsedTime property to the given usedTime.
+Updates the given proxy with given args.
+Proxy must contain ***_address*** (string) & ***_port*** (number) properties in order to identify the proxy in the db.
+***newProps*** (object) will contain the properties to update and their new value (ex: ```{ _active:true }```)
+The method calls the ***callback*** function with error as first parameter and the proxy object that was just updated as second.
 
 #### isProxyExists
 ```js
@@ -58,12 +61,6 @@ isProxyExists (proxy, callback);
 ```
 Checks if the proxy exists in the db. The method calls the ***callback*** function  with error as first parameter and the proxy object from the db, if exists.
 
-#### reportProxyActivity
-```js
-/* Reports the given proxy activity state. */
-reportProxyActivity (proxy,active);
-```
-This method updates the given proxy activity state according to the active paramter. When the proxy is inactive it and will not be used any more for future requests.
 
 ## Installation
 
@@ -95,7 +92,7 @@ Adds a new 'Proxy' object to the pool
 
 First create a proxy object to add:
 ```js
-var proxy = new jsProxyPool.Proxy('address', 'port');
+var proxy = new jsProxyPool.Proxy('[address]', '[port]');
 ```
 
 Then call addProxy:
@@ -113,7 +110,7 @@ pool.addProxy (proxy,function (error, proxy){
 
 Gets a new 'Proxy' that is ready to use
 ```js
-pool.getProxy(function (proxy){
+pool.getProxy(function (error, proxy){
     if (error){
         /* Code to be executed on error */
         return;
@@ -121,9 +118,23 @@ pool.getProxy(function (proxy){
     /* Code to be executed when we got a proxy from the pool */
 });
 ```
->This method automatically calls **updateProxyLastUsedTime** to set that this proxy was just used to make a request.
+>This method automatically calls **updateProxy** to update ***_lastUsedTime*** set that this proxy was just used to make a request.
 
-#### reportProxyActivity
+#### getProxies
+
+Gets an array of Proxies that are ready to use.
+```js
+pool.getProxies(30,function (error, proxies){
+    if (error){
+        /* Code to be executed on error */
+        return;
+    }
+    /* Code to be executed when we got an array of proxies from the pool */
+});
+```
+
+#### reportProxyActivity `[DEPRECATED]`
+
 Updates the proxy active state according to the active parameter. Call this function if the proxy is not working any more.
 ```js
 pool.reportProxyActivity(proxy,active);
@@ -137,7 +148,7 @@ If you don't have any proxies to fill the pool with, it is recommended to refer 
 ## License
 
 
-MIT
+MIT [![badging's License](https://img.shields.io/npm/l/badging.svg)](https://www.npmjs.com/package/proxy-pool)
 
 
 

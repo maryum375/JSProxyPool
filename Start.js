@@ -35,8 +35,8 @@ var addProxy = function(address, port) {
 proxy = new Proxy("123.30.75.116", "3128");
 
 var currentTimeStamp = Date.now();
-pool.updateProxyLastCheckTime(proxy, currentTimeStamp, function(proxyFromDB) {
-
+pool.updateProxy(proxy, { _lastCheckedTime: 1.0 }, function(err,proxyFromDB) {
+        console.log("here");
     })
     // pool.reportProxyActivity(proxy);
 

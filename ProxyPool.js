@@ -40,8 +40,7 @@ ProxyPool.prototype.getProxy = function(callback) {
             return;
         }
 
-        currentPool._dataAccess.updateProxyLastUsedTime(proxy, currentTimeStamp);
-        callback(null, proxy)
+        currentPool._dataAccess.updateProxy(proxy, { _lastUsedTime: currentTimeStamp }, callback);
     };
 
     this._dataAccess.getProxy(maxProxyLastUsedTime, dbCallback);
@@ -66,26 +65,18 @@ ProxyPool.prototype.getProxies = function(count, callback) {
 };
 
 ProxyPool.prototype.reportProxyActivity = function(proxy, active) {
-    this._dataAccess.reportProxyActivity(proxy, active);
+    console.warn("This function is DEPRECATED and will be removed in the next versions of proxy-pool. Please use  ")
+    this.updateProxy(proxy, { _active: active });
 };
 
 ProxyPool.prototype.updateProxyLastCheckTime = function(proxy, lastCheckedTime, callback) {
-
-    var currentPool = this;
-    this._dataAccess.isProxyExists(proxy, function(error, proxyFromDb) {
-        if (error) {
-            callback(error);
-            return;
-        }
-        if (proxyFromDb) {
-            currentPool._dataAccess.updateProxyLastCheckedTime(proxyFromDb, lastCheckedTime);
-            callback(null, proxyFromDb);
-        } else {
-            console.log("Proxy doesn't exist in DB");
-            callback("Proxy doesn't exist in DB");
-        }
-    })
+    console.warn("This function is DEPRECATED and will be removed in the next versions of proxy-pool. Please use  ")
+    this.updateProxy(proxy, { _lastCheckedTime: lastCheckedTime }, callback);
 };
+
+ProxyPool.prototype.updateProxy = function(proxy, newProps, callback) {
+    this._dataAccess.updateProxy(proxy, newProps, callback);
+}
 
 
 module.exports = ProxyPool;
