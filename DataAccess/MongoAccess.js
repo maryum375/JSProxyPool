@@ -59,7 +59,8 @@ MongoAccess.prototype.updateProxy = function(proxy, newProps, callback) {
         $set: newProps
     }).then((updatedProxy) => {
         if (!updatedProxy) {
-            return callback("Failed to update proxy: No such proxy exists");
+            var err = new Error("Failed to update proxy: No such proxy exists")
+            return callback(err);
         }
         callback(null, updatedProxy);
     }).catch((err) => {
