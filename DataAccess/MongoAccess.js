@@ -10,7 +10,7 @@ function MongoAccess(mongoConnectionString, proxiesCollectionName) {
 MongoAccess.prototype.getProxy = function(maxLastUsedTime, callback) {
     return this.getProxies(maxLastUsedTime, 1, function(err, proxies) {
         if (err) {
-            callback(err)
+            return callback(err)
         }
         callback(err, proxies[0])
     });
