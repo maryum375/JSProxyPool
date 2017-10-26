@@ -1,14 +1,27 @@
 var monk = require('monk');
 var Proxy = require('../Proxy');
+var consts = require("../constants");
 
 function MongoAccess(mongoConnectionString, proxiesCollectionName) {
     this._monkInstance = monk(mongoConnectionString);
     this._proxiesCollectionName = proxiesCollectionName;
 }
 
-/* Gets a proxy from the database that its last use time was before the maxLastUsedTime (timestamp). */
-MongoAccess.prototype.getProxy = function(maxLastUsedTime, callback) {
-    return this.getProxies(maxLastUsedTime, 1, function(err, proxies) {
+function ConvertOptionsToMongoQuery(options) {
+    var queryAndConditions = [];
+    if (options[consts.MAX_LAST_USED_TIME_OPTION_NAME]) {
+        queryAndConditions.push({ _lastUsedTime: { $lt: options[consts.MAX_LAST_USED_TIME_OPTION_NAME] } })
+    }
+    if (options[consts.PROXY_ACTIVITY_OPTION_NAME]) {
+        queryAndConditions.push({ _active: options[consts.PROXY_ACTIVITY_OPTION_NAME] })
+    }
+    return queryAndConditions;
+}
+
+/* Gets a proxy from the database. */
+MongoAccess.prototype.getProxy = function(options, callback) {
+    options[consts.PROXIES_COUNT_OPTION_NAME] = 1
+    return this.getProxies(options, function(err, proxies) {
         if (err) {
             return callback(err)
         }
@@ -16,8 +29,9 @@ MongoAccess.prototype.getProxy = function(maxLastUsedTime, callback) {
     });
 };
 
-MongoAccess.prototype.getProxies = function(maxLastUsedTime, count, callback) {
+MongoAccess.prototype.getProxies = function(options, callback) {
     var collection = this._monkInstance.get(this._proxiesCollectionName);
+
 
     /* Handles proxies find results */
     var findCallback = function(err, docs) {
@@ -28,9 +42,8 @@ MongoAccess.prototype.getProxies = function(maxLastUsedTime, count, callback) {
             return;
         }
 
-        if (docs !== null && docs.length >= count) {
-            var proxies = docs.sort(Proxy.compare).slice(0, count);
-            callback(null, proxies);
+        if (docs !== null && docs.length >= 1) {
+            callback(null, docs);
         } else {
             var errorMessage = "No proxy that matches the criteria";
             var err = new Error(errorMessage);
@@ -39,13 +52,11 @@ MongoAccess.prototype.getProxies = function(maxLastUsedTime, count, callback) {
         }
     };
 
+    var queryAndConditions = ConvertOptionsToMongoQuery(options);
 
     collection.find({
-        $and: [
-            { _lastUsedTime: { $lt: maxLastUsedTime } },
-            { _active: true }
-        ]
-    }, findCallback);
+        $and: queryAndConditions
+    }, { sort: options[consts.PROXIES_SORTING_OPTION_NAME], limit: options[consts.PROXIES_COUNT_OPTION_NAME] }, findCallback);
 }
 
 /* Updates the given proxy with given args. */

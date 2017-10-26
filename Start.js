@@ -34,14 +34,14 @@ var addProxy = function(address, port) {
 
 proxy = new Proxy("123.30.75.116", "3128");
 
-var currentTimeStamp = Date.now();
-pool.updateProxy(proxy, { _lastCheckedTime: 1.0 }, function(err,proxyFromDB) {
-        console.log("here");
-    })
-    // pool.reportProxyActivity(proxy);
+// var currentTimeStamp = Date.now();
+// pool.updateProxy(proxy, { _lastCheckedTime: 1.0 }, function(err,proxyFromDB) {
+//         console.log("here");
+//     })
+// pool.reportProxyActivity(proxy);
 
 //addProxy("202.22.195.193", "1080");
 
 //addProxy("190.109.164.81", "1080");
 
-// pool.getProxy(gettingProxyCallback);
+pool.getProxies({ count: 15, sortby: "_port" }, gettingProxyCallback);

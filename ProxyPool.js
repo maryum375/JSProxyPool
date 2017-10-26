@@ -1,4 +1,5 @@
 var Proxy = require('./Proxy');
+var consts = require("./constants");
 
 function ProxyPool(config) {
     this.initialize(config);
@@ -7,7 +8,8 @@ function ProxyPool(config) {
 
 ProxyPool.prototype.initialize = function(config) {
     this._dataAccess = config.dataAccess;
-    this._minimumProxySleepTime = config.minimumProxySleepTime;
+    this.poolConfiguration = {};
+    this.poolConfiguration._minimumProxySleepTime = config.minimumProxySleepTime;
 };
 
 ProxyPool.prototype.addProxy = function(proxy, callback) {
@@ -28,10 +30,9 @@ ProxyPool.prototype.addProxy = function(proxy, callback) {
     })
 };
 
-ProxyPool.prototype.getProxy = function(callback) {
-
+ProxyPool.prototype.getProxy = function(options, callback) {
     var currentTimeStamp = Date.now();
-    var maxProxyLastUsedTime = Date.now() - this._minimumProxySleepTime;
+    options = setDefaultOptionsValues(options, this.poolConfiguration);
     var currentPool = this;
 
     var dbCallback = function(error, proxy) {
@@ -40,16 +41,15 @@ ProxyPool.prototype.getProxy = function(callback) {
             return;
         }
 
-        currentPool._dataAccess.updateProxy(proxy, { _lastUsedTime: currentTimeStamp }, callback);
+        currentPool.updateProxy(proxy, { _lastUsedTime: currentTimeStamp }, callback);
     };
 
-    this._dataAccess.getProxy(maxProxyLastUsedTime, dbCallback);
+    this._dataAccess.getProxy(options, dbCallback);
 };
 
-ProxyPool.prototype.getProxies = function(count, callback) {
+ProxyPool.prototype.getProxies = function(options, callback) {
 
-    var currentTimeStamp = Date.now();
-    var maxProxyLastUsedTime = Date.now() - this._minimumProxySleepTime;
+    options = setDefaultOptionsValues(options, this.poolConfiguration);
     var currentPool = this;
 
     var dbCallback = function(error, proxies) {
@@ -61,7 +61,7 @@ ProxyPool.prototype.getProxies = function(count, callback) {
         callback(null, proxies)
     };
 
-    this._dataAccess.getProxies(maxProxyLastUsedTime, count, dbCallback);
+    this._dataAccess.getProxies(options, dbCallback);
 };
 
 ProxyPool.prototype.reportProxyActivity = function(proxy, active) {
@@ -76,6 +76,29 @@ ProxyPool.prototype.updateProxyLastCheckTime = function(proxy, lastCheckedTime, 
 
 ProxyPool.prototype.updateProxy = function(proxy, newProps, callback) {
     this._dataAccess.updateProxy(proxy, newProps, callback);
+}
+
+function setDefaultOptionValue(options, optionName, optionValue) {
+    if (!options[optionName]) {
+        options[optionName] = optionValue;
+    }
+    return options;
+}
+
+function setDefaultOptionsValues(options, poolConfiguration) {
+    //Set default to return 1 proxy
+    options = setDefaultOptionValue(options, consts.PROXIES_COUNT_OPTION_NAME, consts.PROXIES_COUNT_OPTION_VALUE);
+
+    //Set default to return active proxies
+    options = setDefaultOptionValue(options, consts.PROXY_ACTIVITY_OPTION_NAME, consts.PROXY_ACTIVITY_OPTION_VALUE);
+
+    //Set default to the way to sort the returned proxies
+    options = setDefaultOptionValue(options, consts.PROXIES_SORTING_OPTION_NAME, consts.PROXIES_SORTING_OPTION_VALUE);
+
+    //Set default to return proxies from last x (configurable) time
+    options = setDefaultOptionValue(options, consts.MAX_LAST_USED_TIME_OPTION_NAME, Date.now() - poolConfiguration._minimumProxySleepTime);
+
+    return options;
 }
 
 
