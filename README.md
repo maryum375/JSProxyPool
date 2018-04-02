@@ -22,9 +22,14 @@ To implement a new database access all you need to do is implement the following
 #### getProxy
 ```js
 /* Gets a proxy from the database */
-getProxy (maxLastUsedTime, callback);
+getProxy (options, callback);
 ```
-Gets a proxy from the database that its last use time was before the ***maxLastUsedTime*** (timestamp).
+Gets a proxy from the database
+
+##### *options*:
+***maxLastUsedTime*** (timestamp): Returns only proxies that were used before param value.
+***active*** (boolean): Whether to return active proxies or inactive proxies
+
 The method calls the ***callback*** function with error as first parameter and the proxy object as second.
 
 #### getProxies
@@ -32,7 +37,14 @@ The method calls the ***callback*** function with error as first parameter and t
 /* Gets a list of proxies from the database */
 getProxies (maxLastUsedTime, count, callback);
 ```
-Gets a list of proxies from the database. The proxies will be only proxies what were used before ***maxLastUsedTime*** (Timestamp) time, and The amount of proxies in the list will be according to ***count*** (number) parameter.
+Gets a list of proxies from the database.
+
+##### *options*:
+***count*** (number): The amount of proxies to get.
+***maxLastUsedTime*** (timestamp): Returns only proxies that were used before param value.
+***active*** (boolean): Whether to return active proxies or inactive proxies
+***soryby*** (object): As documented [here](https://docs.mongodb.com/manual/reference/method/cursor.sort/)
+
 The method calls the ***callback*** function with error as first parameter and the proxies array object as second.
 
 #### addProxy
@@ -110,7 +122,7 @@ pool.addProxy (proxy,function (error, proxy){
 
 Gets a new 'Proxy' that is ready to use
 ```js
-pool.getProxy(function (error, proxy){
+pool.getProxy({},function (error, proxy){
     if (error){
         /* Code to be executed on error */
         return;
@@ -124,7 +136,7 @@ pool.getProxy(function (error, proxy){
 
 Gets an array of Proxies that are ready to use.
 ```js
-pool.getProxies(30,function (error, proxies){
+pool.getProxies({},function (error, proxies){
     if (error){
         /* Code to be executed on error */
         return;
